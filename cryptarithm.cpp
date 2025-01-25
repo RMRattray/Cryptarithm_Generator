@@ -13,7 +13,7 @@ void cryptarithm::string_to_int_by_permutation(char* str, char* perm, int* val) 
     return;
 }
 
-void get_permutation_update(char* prev, char* curr, uint8_t* firsts, uint8_t* diff) {
+void cryptarithm::get_permutation_update(char* prev, char* curr, uint8_t* firsts, uint8_t* diff) {
     // This function takes in permutation prev, e.g., 8675309214,
     // and finds the next permutation that does *not* put zero in a position
     // where 'firsts' is true (e.g., if the 'firsts' array starts with a 1, zero
@@ -36,13 +36,13 @@ void get_permutation_update(char* prev, char* curr, uint8_t* firsts, uint8_t* di
     return;
 }
 
-void string_to_int_by_diff(char* str, int* val, uint8_t* diff) {
+void cryptarithm::string_to_int_by_diff(char* str, int* val, uint8_t* diff) {
     // This function takes a string that has been converted by an old permutation
     // to be the value in val, and updates the value based on the diff
     return;
 }
 
-char * int_to_string_by_permutation(char* str, char* letters, char* perm, int* val) {
+char * cryptarithm::int_to_string_by_permutation(char* str, char* letters, char* perm, int* val) {
     // This function does a double substitution
     // Example:
     // val:          12271
@@ -54,7 +54,7 @@ char * int_to_string_by_permutation(char* str, char* letters, char* perm, int* v
     // final result: 788n7
 }
 
-int operation(cryptarithm::Operat op_code, int* vals) {
+int cryptarithm::operation(cryptarithm::Operat op_code, int* vals) {
     // If op_code is Addition, returns the sum of all the ints in the null-terminated array vals
     // If subtraction, takes the first and subtracts the rest from it
     // If multiplication, returns the product
