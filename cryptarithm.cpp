@@ -5,11 +5,31 @@
 #include "cryptarithm.h"
 #include <cstdarg>
 
+
 void cryptarithm::string_to_int_by_permutation(char* str, char* perm, int* val) {
     // This function takes in a word, e.g. "more", which has been converted to "4561"
     // And a permutation, e.g., "8675309214", which means that '0' becomes 8, '1' becomes 6, etc.
     // so '4561' becomes 3096
     // And produces the relevant value and places it in val
+    int temp[20] = {0,};
+    int result = 0;
+
+    for (int i = 0; i < strlen(str); i++) {
+
+        int index = str[i] - '0';
+        temp[i] = (int) (perm[index] - '0');
+
+    }
+
+    for (int i = 0; i < strlen(str); i++) {
+
+        result = result*10 + temp[i];
+
+    }
+
+    *val = result;
+    printf("%d\n", *val);
+
     return;
 }
 
