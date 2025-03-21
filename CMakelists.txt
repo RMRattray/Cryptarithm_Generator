@@ -17,9 +17,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Presumably, $QT_VERSION_MAJOR will be 6 for the foreseeable future
-# Anyhow, make sure we have the Widgets package, else quit
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# Make sure we have the Widgets package, else quit
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 add_subdirectory(src/app)
 add_subdirectory(src/backend)
