@@ -1,0 +1,25 @@
+# CMakelists.txt is the primary makefile for a Qt project
+# See template:  https://doc.qt.io/qt-6/cmake-get-started.html
+
+# Qt requires at least version 3.16 of CMake
+cmake_minimum_required(VERSION 3.16)
+
+# Set project (application) name, version, and language C++
+project(cryptarithm VERSION 1.0.0 LANGUAGES CXX)
+
+# Qt requires recent C++
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Import Qt Widgets module, which imports Core
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+# Standard project setup
+qt_standard_project_setup()
+
+# Root of the program source code is here
+# Including file CMakelists.txt delineating executable
+add_subdirectory(src/app)
+
+# Example library is here
+# Including file CMakelists.txt delineating library
+add_subdirectory(src/backend)

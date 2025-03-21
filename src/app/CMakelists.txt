@@ -1,0 +1,17 @@
+# Add source code and declare that we are building an executable,
+# as opposed to a library
+qt_add_executable(cryptarithm
+    main.cpp
+    mainwindow.cpp
+)
+
+# Use libraries in this executable
+target_link_libraries(cryptarithm PRIVATE 
+    backend
+    Qt6::Widgets
+)
+
+set_target_properties(cryptarithm PROPERTIES
+    WIN32_EXECUTABLE ON
+    MACOSX_BUNDLE ON
+)
