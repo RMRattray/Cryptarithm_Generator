@@ -25,6 +25,8 @@ Window::Window(QWidget *parent) :
  //      [+] [___________] //                       //
  //          ------------- //                       //
  //          [___________] //                       //
+ //                        //                       //
+ // [Reset] [   GO    ]    //                       //
  /////////////////////////////////////////////////////
 
  // Make a main layout object
@@ -49,11 +51,13 @@ Window::Window(QWidget *parent) :
 
  QFormLayout * selections = new QFormLayout();
  selections->addRow(new QLabel(tr("Operation")), operation_combo_box);
- selections->addRow(new QLabel(tr("Operation")), word_count_combo_box);
+ selections->addRow(new QLabel(tr("Word count")), word_count_combo_box);
 
  left_stack_layout->addItem(selections);
  
  // Next thing is the arithmetic text area
+ arithmetic_args_box = new ArithBox();
+ left_stack_layout->addWidget(arithmetic_args_box);
  
  // Last thing are the buttons to go
  // and to reset
@@ -69,4 +73,7 @@ Window::Window(QWidget *parent) :
 
  this->setLayout(main_split_layout);
 
+ // And the signals and slots!
+ connect(reset_button, SIGNAL(&QPushButton::clicked), arithmetic_args_box, SLOT(&ArithBox::reset_factor_stack));
+ connect(operation_combo_box, SIGNAL(&QComboBox::currentIndexChanged(int)), arithmetic_args_box, SLOT(&ArithBox::change_focus_op(int)));
 }

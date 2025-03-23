@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <QWidget>
+#include "wordboxbox.h"
 
 class QPushButton;
 class QVBoxLayout;
@@ -20,6 +21,7 @@ class Window : public QWidget
  QHBoxLayout *main_split_layout;
  QScrollArea *solution_scroll_area;
  QVBoxLayout *left_stack_layout;
+ ArithBox *arithmetic_args_box;
 };
 
 #endif // WINDOW_H
