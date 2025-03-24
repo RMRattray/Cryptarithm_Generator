@@ -4,7 +4,7 @@
 #include <QPushButton>
 #include "wordboxbox.h"
 
-FactorBox::FactorBox(QWidget *parent = nullptr) : QFrame(parent) {
+FactorBox::FactorBox(QWidget *parent) : QFrame(parent) {
     // Main layout is two items
     QHBoxLayout * main_layout = new QHBoxLayout;
     main_layout->addSpacing(30);
@@ -21,7 +21,7 @@ void FactorBox::blank_contents() {
     factor_box->setText(tr(""));
 }
 
-ArithBox::ArithBox(QWidget *parent = nullptr) : QFrame(parent) {
+ArithBox::ArithBox(QWidget *parent) : QFrame(parent) {
     // Main layout is a vertical stack
     QVBoxLayout * main_layout = new QVBoxLayout;
     main_layout->addStretch(1);

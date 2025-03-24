@@ -12,8 +12,7 @@ enum Operation {
 
 struct request_data
 {
-    int factor_count;
-    int blank;
+    Operation op;
     std::vector<std::string> factors;
 };
 
