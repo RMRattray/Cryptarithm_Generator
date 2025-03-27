@@ -54,7 +54,7 @@ ArithBox::ArithBox(QWidget *parent) : QFrame(parent) {
     factors = 2;
 
     // Connect the button's clicked signal to the slot to add a text box
-    connect(operation_button, SIGNAL(&QPushButton::clicked), this, SLOT(&ArithBox::add_text_box));
+    connect(operation_button, SIGNAL(clicked()), this, SLOT(add_text_box()));
 
     setLayout(main_layout);
 }
