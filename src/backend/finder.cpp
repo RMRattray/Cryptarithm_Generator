@@ -54,8 +54,6 @@ void Finder::recursively_permute(int index)
         if (strchr(digits, v)) continue;
         digits[index] = v;
 
-        std::cout << "Permuting on:  " << digits << std::endl;
-        
         // For each of such, update letters in words
         for (char * loc : character_finds[index]) *loc = v;
         // And in the decode string
