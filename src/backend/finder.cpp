@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -9,7 +10,31 @@
 
 using namespace cryptarithm;
 
-std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
+std::vector<std::string> Finder::find_cryptarithms(request_data given_req) {
+    return find_cryptarithms(given_req, false);
+}
+
+template <typename T>
+typename std::vector<T>::iterator truly_unique(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
+    std::vector<T>::iterator tortoise = start;
+    std::vector<T>::iterator hare = start;
+    std::vector<T>::iterator achilles;
+    while(hare < end) {
+        achilles = hare;
+        std::cout << *achilles;
+        while (achilles < end && *achilles == *hare) ++achilles;
+        if (achilles == std::next(hare)) {
+            std::cout << " to be copied\n";
+            *tortoise = *hare;
+            ++tortoise;
+        } else std::cout << " to be removed\n";
+        hare = achilles;
+    }
+    std::cout << "This function returns.\n";
+    return tortoise;
+}
+
+std::vector<std::string> Finder::find_cryptarithms(request_data given_req, bool all_possible)
 {
     req = &given_req;
     std::cout << "Starting to find cryptarithms.\n";
@@ -22,9 +47,17 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
         clean_string(&search_string);
     }
     std::cout << "Cleaned search strings\n";
-    std::sort(all_search_strings.begin(), all_search_strings.end());
-    all_search_strings.erase(std::unique(all_search_strings.begin(), all_search_strings.end()), all_search_strings.end());
-
+    // If we're looking for all possible answers,
+    // just remove duplicates of search strings for efficiency
+    std::sort(all_search_strings.begin(), all_search_strings.end());   
+    if (all_possible) all_search_strings.erase(std::unique(all_search_strings.begin(), all_search_strings.end()), all_search_strings.end());
+    // Otherwise, remove any strings that are duplicated at all (unsolvable puzzles)
+    else {
+        std::vector<std::string>::iterator end = truly_unique<std::string>(all_search_strings.begin(), all_search_strings.end());
+        std::cout << "Keeping: " << (end - all_search_strings.begin());
+        std::cout << "\tRemoving: " << all_search_strings.end() - end << std::endl;
+        all_search_strings.erase(end, all_search_strings.end());
+    }
     return all_search_strings;
 }
 

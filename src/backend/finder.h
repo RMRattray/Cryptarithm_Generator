@@ -12,6 +12,7 @@ class Finder {
     public:
         /// Public function
         std::vector<std::string> find_cryptarithms(request_data req);
+        std::vector<std::string> find_cryptarithms(request_data req, bool all_possible);
     private:
         //////////////////////
         // Private members

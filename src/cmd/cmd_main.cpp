@@ -5,13 +5,13 @@
 #include "finder.h"
 
 int main(int argc, char ** argv) {
-    if (argc < 4) {
-        std::cout << "Correct usage:\ncryptarithm_cmd.exe op word1 word2...\nExample\ncryptarithm_cmd.exe + send more";
+    if (argc < 5) {
+        std::cout << "Correct usage:\ncryptarithm_cmd.exe ex op word1 word2...\nExample\ncryptarithm_cmd.exe ! + send more";
         return EXIT_FAILURE;
     }
 
     request_data main_req;
-    switch (argv[1][0])
+    switch (argv[2][0])
     {
     case '+':
         main_req.op = Operation::ADDITION;
@@ -27,7 +27,7 @@ int main(int argc, char ** argv) {
         return EXIT_FAILURE;
     }
 
-    int a = 2;
+    int a = 3;
     while (a < argc) {
         std::string factor = std::string(argv[a]);
         main_req.factors.push_back(factor);
@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
     }
 
     cryptarithm::Finder f;
-    auto w = f.find_cryptarithms(main_req);
+    auto w = f.find_cryptarithms(main_req, (argv[1][0] == '!'));
     for (std::string search_string : w) {
         std::cout << search_string << std::endl;
     }
