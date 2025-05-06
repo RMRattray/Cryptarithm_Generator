@@ -28,6 +28,7 @@ class Finder {
         void gather_letters(void);
         void recursively_permute(int index);
         void do_arithmetic(void);
+        void clean_string(std::string * s);
 };
 }
 

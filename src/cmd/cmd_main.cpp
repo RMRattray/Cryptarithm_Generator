@@ -35,5 +35,8 @@ int main(int argc, char ** argv) {
     }
 
     cryptarithm::Finder f;
-    f.find_cryptarithms(main_req);
+    auto w = f.find_cryptarithms(main_req);
+    for (std::string search_string : w) {
+        std::cout << search_string << std::endl;
+    }
 }

@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 #include "backend.h"
@@ -11,14 +13,18 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
 {
     req = &given_req;
     std::cout << "Starting to find cryptarithms.\n";
-    this->gather_letters();
+    gather_letters();
     std::cout << "Gathered letters:\n";
     std::cout << letters << std::endl;
-    this->recursively_permute(0);
-    for (std::string search_string : all_search_strings) {
-        std::cout << search_string << std::endl;
+    recursively_permute(0);
+    std::cout << "Developed search strings\n";
+    for (std::string& search_string : all_search_strings) {
+        clean_string(&search_string);
     }
-    std::cout << "Have all search strings:\n";
+    std::cout << "Cleaned search strings\n";
+    std::sort(all_search_strings.begin(), all_search_strings.end());
+    all_search_strings.erase(std::unique(all_search_strings.begin(), all_search_strings.end()), all_search_strings.end());
+
     return all_search_strings;
 }
 
@@ -102,4 +108,30 @@ void Finder::do_arithmetic(void)
     // Deep copy string and insert to vector
     all_search_strings.push_back(std::string(product_str));
     return;
+}
+
+void Finder::clean_string(std::string * s)
+{
+    // Example string: "4e240a" -> "0e102a"
+    // 4e240a -> 0e20:a -> 0e10:a -> 0e102a
+    char * l = &((*s)[0]); // Position in string
+    char * m; // Position in rest of string
+    char d = '0'; // Next digit to use
+    char f; // Digit being replaced
+    char r = '9' + 1; // Symbol used for replacing
+    while (f = *l)
+    {
+        if (f >= d && f <= 'a') {
+            // We found a digit (or a symbol)
+            m = l;
+            while(*m) {
+                if (*m == f) *m = d;
+                else if (*m == d) *m = r;
+                ++m;
+            }
+            ++d;
+            ++r;
+        }
+        ++l;
+    }
 }
