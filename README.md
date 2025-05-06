@@ -3,7 +3,7 @@
 Building on Robert's machine requires two steps:  configuring and building.
 Configuring is performed by the command:
 ```
-cmake -DCMAKE_PREFIX_PATH=C:\Qt\6.7.2.\msvc2022_64 -B build/win_64_build
+cmake -B build/win_64_build
 ```
 and building by the command:
 ```
@@ -19,3 +19,12 @@ owing to the `src/app/CMakeLists.txt` defining the executable.
 
 Having the .vscode/c_cpp_properties.json is what allows IntelliSense
 to recognize the Qt library.
+
+There exists a separate, command-line version that can be made, configuring with
+```
+cmake -S src/cmd build/cmd_version
+```
+and building with
+```
+cmake --build build/cmd_version
+```

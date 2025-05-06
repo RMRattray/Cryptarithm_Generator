@@ -7,7 +7,8 @@ add_executable(cryptarithm_cmd
 )
 
 # Use the "backend" library
-add_subdirectory(../backend)
+add_subdirectory(../backend ./backend_copy)
+
 target_link_libraries(cryptarithm_cmd PRIVATE 
     backend
 )
