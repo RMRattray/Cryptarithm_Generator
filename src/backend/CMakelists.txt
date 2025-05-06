@@ -1,10 +1,12 @@
 # Creates a library with the code in this folder
 # It's a static, not a shared or dynamic, library
-qt_add_library(backend STATIC
+add_library(backend STATIC 
     backend.h
+    new_recurser.cpp
 )
 
-# We may want to use Qt Core in this library
-target_link_libraries(backend PRIVATE Qt6::Core)
+# We do not want to use Qt Core in this library
+# Otherwise, we should have used "qt_add_library" above
+# target_link_libraries(backend PRIVATE Qt6::Core)
 
 target_include_directories(backend INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
