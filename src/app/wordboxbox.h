@@ -18,7 +18,7 @@ class ArithBox : public QFrame {
     private slots:
         void add_text_box();
         void reset_factor_stack();
-        void change_focus_op(Operation op);
+        void change_focus_op(int new_index);
     private:
         QPushButton* operation_button;
         QLineEdit* product_box;

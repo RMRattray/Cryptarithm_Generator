@@ -72,16 +72,16 @@ void ArithBox::reset_factor_stack() {
     }
 }
 
-void ArithBox::change_focus_op(Operation op) {
-    switch (op)
+void ArithBox::change_focus_op(int new_index) {
+    switch (new_index)
     {
-    case ADDITION:
+    case 0:
         operation_button->setText(tr("+"));
         break;
-    case SUBTRACTION:
+    case 1:
         operation_button->setText(tr("-"));
         break;
-    case MULTIPLICATION:
+    case 2:
         operation_button->setText(tr("x"));
     default:
         break;
