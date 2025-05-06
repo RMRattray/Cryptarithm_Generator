@@ -2,7 +2,8 @@
 # It's a static, not a shared or dynamic, library
 add_library(backend STATIC 
     backend.h
-    new_recurser.cpp
+    finder.h 
+    finder.cpp
 )
 
 # We do not want to use Qt Core in this library

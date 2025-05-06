@@ -16,8 +16,4 @@ struct request_data
     std::vector<std::string> factors;
 };
 
-std::vector<std::string> find_cryptarithms(request_data req);
-void do_arithmetic();
-
-
 #endif

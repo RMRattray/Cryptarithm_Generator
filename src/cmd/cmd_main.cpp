@@ -1,9 +1,14 @@
-#include "backend.h"
-#include <vector>
+#include <iostream>
 #include <string>
+#include <vector>
+#include "backend.h"
+#include "finder.h"
 
 int main(int argc, char ** argv) {
-    if (argc < 4) return EXIT_FAILURE;
+    if (argc < 4) {
+        std::cout << "Correct usage:\ncryptarithm_cmd.exe op word1 word2...\nExample\ncryptarithm_cmd.exe + send more";
+        return EXIT_FAILURE;
+    }
 
     request_data main_req;
     switch (argv[1][0])
@@ -18,6 +23,7 @@ int main(int argc, char ** argv) {
         main_req.op = Operation::MULTIPLICATION;
         break;
     default:
+        std::cout << "Operation must be +, -, or *\n";
         return EXIT_FAILURE;
     }
 
@@ -28,5 +34,6 @@ int main(int argc, char ** argv) {
         ++a;
     }
 
-    find_cryptarithms(main_req);
+    cryptarithm::Finder f;
+    f.find_cryptarithms(main_req);
 }

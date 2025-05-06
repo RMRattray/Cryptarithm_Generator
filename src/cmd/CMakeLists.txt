@@ -6,6 +6,9 @@ add_executable(cryptarithm_cmd
     cmd_main.cpp
 )
 
+# set(CMAKE_CXX_COMPILER, "C:\\Program Files (x86)\\msys64\\mingw64\\bin\\g++.exe")
+# set(CMAKE_CXX_FLAGS_DEBUG "/Z7")
+
 # Use the "backend" library
 add_subdirectory(../backend ./backend_copy)
 
