@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QFormLayout>
 #include <QGroupBox>
+#include <iostream>
 
 Window::Window(QWidget *parent) :
  QWidget(parent)
@@ -74,7 +75,35 @@ Window::Window(QWidget *parent) :
 
     this->setLayout(main_split_layout);
 
+    // And let's not forget the finder object itself!
+    my_q_finder = new QFinder();
+    my_q_finder->slot_read_file("words.txt");
+
     // And the signals and slots!
+    /////////////////////////////////
+
+    // Make the buttons to modify the arithmetic box from outside functional
     connect(reset_button, SIGNAL(clicked()), arithmetic_args_box, SLOT(reset_factor_stack()));
     connect(operation_combo_box, SIGNAL(currentIndexChanged(int)), arithmetic_args_box, SLOT(change_focus_op(int)));
+    
+    // Signals and slots to calculate the solution
+    connect(go_button, SIGNAL(clicked()), this, SLOT(slot_calculate_request()));
+    connect(this, SIGNAL(request_data_ready(request_data)), my_q_finder, SLOT(slot_find_cryptarithms(request_data)));
+    connect(my_q_finder, SIGNAL(signal_words_found()), this, SLOT(slot_populate_solution_area()));
+}
+
+void Window::slot_calculate_request() {
+    std::cout << "I can debug by printing.\n";
+    request_data req = arithmetic_args_box->yield_text_contents();
+    emit request_data_ready(req);
+}
+
+void Window::slot_populate_solution_area() {
+    QWidget * dummy = new QWidget();
+    QVBoxLayout * right_stack_layout = new QVBoxLayout();
+    solution_scroll_area->setWidget(dummy);
+    dummy->setLayout(right_stack_layout);
+    for (std::string word : my_q_finder->words) {
+        right_stack_layout->addWidget(new QLabel(QString::fromStdString(word)));
+    }
 }

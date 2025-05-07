@@ -3,11 +3,21 @@
 
 #include <QFrame>
 #include <string>
+#include <vector>
 #include <backend.h>
 
 class QPushButton;
 class QLineEdit;
 class QVBoxLayout;
+
+class FactorBox : public QFrame {
+    public:
+        explicit FactorBox(QWidget *parent = 0);
+        std::string yield_text_contents();
+        void blank_contents();
+    private:
+        QLineEdit* factor_box;      
+};
 
 class ArithBox : public QFrame {
     Q_OBJECT
@@ -24,15 +34,7 @@ class ArithBox : public QFrame {
         QLineEdit* product_box;
         QLineEdit* final_factor_box;
         QVBoxLayout* factor_stack;
-};
-
-class FactorBox : public QFrame {
-    public:
-        explicit FactorBox(QWidget *parent = 0);
-        std::string yield_text_contents();
-        void blank_contents();
-    private:
-        QLineEdit* factor_box;      
+        std::vector<FactorBox *> factor_box_ptrs;
 };
 
 #endif

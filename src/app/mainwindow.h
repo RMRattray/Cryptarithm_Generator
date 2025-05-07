@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <QWidget>
+#include "qfinder.h"
 #include "wordboxbox.h"
 
 class QPushButton;
@@ -14,6 +15,14 @@ class Window : public QWidget
     Q_OBJECT
     public:
     explicit Window(QWidget *parent = 0);
+
+    signals:
+    void request_data_ready(request_data req);
+
+    private slots:
+    void slot_calculate_request();
+    void slot_populate_solution_area();
+
     private:
     QComboBox *operation_combo_box;
     QComboBox *word_count_combo_box;
@@ -23,6 +32,8 @@ class Window : public QWidget
     QScrollArea *solution_scroll_area;
     QVBoxLayout *left_stack_layout;
     ArithBox *arithmetic_args_box;
+
+    QFinder *my_q_finder;
 };
 
 #endif // WINDOW_H

@@ -28,7 +28,9 @@ ArithBox::ArithBox(QWidget *parent) : QFrame(parent) {
 
     // First object in it is the factor stack
     factor_stack = new QVBoxLayout;
-    factor_stack->addWidget(new FactorBox);
+    FactorBox * first_factor_box = new FactorBox;
+    factor_box_ptrs.push_back(first_factor_box);
+    factor_stack->addWidget(first_factor_box);
     main_layout->addLayout(factor_stack);
 
     // Button to add more factors, next to last factor
@@ -70,6 +72,7 @@ void ArithBox::reset_factor_stack() {
         delete child->widget(); // delete the widget
         delete child;   // delete the layout item
     }
+    factor_box_ptrs.erase(factor_box_ptrs.begin() + 1, factor_box_ptrs.end());
 }
 
 void ArithBox::change_focus_op(int new_index) {
@@ -87,10 +90,68 @@ void ArithBox::change_focus_op(int new_index) {
         break;
     }
 }
-// private slots:
-//     void addTextBox() {
-//         // Create a new text box and add it to the layout
-//         QLineEdit *newTextBox = new QLineEdit(this);
-//         layout()->addWidget(newTextBox);
-//     }
-// };
+
+struct request_data ArithBox::yield_text_contents() {
+    request_data nullo;
+    request_data req;
+    
+    // Read in first and last factors as strings
+    std::string s;
+    std::string f;
+    s = product_box->text().toStdString();
+    bool last_not_blank = (s != std::string(""));
+    f = factor_box_ptrs[0]->yield_text_contents() != std::string("");
+    bool first_not_blank = (f != std::string(""));
+    // If both first word and last word are blank, invalid puzzle
+    if (!first_not_blank && !last_not_blank) return nullo;
+    // If one or the other is blank, we've found the blank, invalidate
+    // if we find another
+    bool found_one_blank = !(first_not_blank && last_not_blank);
+
+    switch (operation_button->text().front().toLatin1() + last_not_blank) {
+        // If there is a last word and we are adding, it is effectively
+        // a subtraction problem wherein the first word is the 'sum'
+        case '+' + true:
+            req.factors.push_back(s);
+        case '-':
+            if (first_not_blank) req.factors.push_back(f);
+            req.op = Operation::SUBTRACTION;
+            break;
+        // If we are multiplying, the last word must be empty, as division
+        // is not an option with integers
+        case 'x':
+            req.factors.push_back(f);
+            req.op = Operation::MULTIPLICATION;
+            break;
+        case 'x' + true:
+            return nullo;
+        // If subtracting but the last word is not blank, operation depends
+        // on whether the first word is the blank one.  If the first word
+        // is blank, then we are adding
+        case '-' + true:
+            if (first_not_blank) {
+                req.op = Operation::SUBTRACTION;
+                req.factors.push_back(f);
+            } else req.op = Operation::ADDITION;
+            req.factors.push_back(s);
+        // Normal addition case is normal addition case
+        case '+':
+            req.factors.push_back(f);
+        default:
+            req.op = Operation::ADDITION;
+    }
+
+    // Get the rest of the factors - hopefully we don't have multiple blanks
+    std::vector<FactorBox *>::iterator fb = factor_box_ptrs.begin() + 1;
+    while (fb < factor_box_ptrs.end()) {
+        s = (*fb)->yield_text_contents();
+        if (s != std::string("")) req.factors.push_back(s);
+        else if (found_one_blank) return nullo;
+        else found_one_blank = true;
+    }
+    f = final_factor_box->text().toStdString();
+    if (f != std::string("")) req.factors.push_back(f);
+    else if (found_one_blank) return nullo;
+
+    return req;
+}
