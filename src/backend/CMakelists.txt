@@ -4,6 +4,8 @@ add_library(backend STATIC
     backend.h
     finder.h 
     finder.cpp
+    trie.h
+    trie.cpp
 )
 
 # We do not want to use Qt Core in this library

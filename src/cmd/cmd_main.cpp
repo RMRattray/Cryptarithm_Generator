@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "backend.h"
-#include "finder.h"
+#include "../backend/backend.h"
+#include "../backend/finder.h"
 
 int main(int argc, char ** argv) {
     if (argc < 5) {
@@ -39,4 +39,5 @@ int main(int argc, char ** argv) {
     for (std::string search_string : w) {
         std::cout << search_string << std::endl;
     }
+    f.read_words("words.txt");
 }

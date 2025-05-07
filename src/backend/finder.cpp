@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <map>
 #include <set>
@@ -7,6 +8,7 @@
 #include <vector>
 #include "backend.h"
 #include "finder.h"
+#include "trie.h"
 
 using namespace cryptarithm;
 
@@ -16,21 +18,18 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req) {
 
 template <typename T>
 typename std::vector<T>::iterator truly_unique(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
-    std::vector<T>::iterator tortoise = start;
-    std::vector<T>::iterator hare = start;
-    std::vector<T>::iterator achilles;
+    typename std::vector<T>::iterator tortoise = start;
+    typename std::vector<T>::iterator hare = start;
+    typename std::vector<T>::iterator achilles;
     while(hare < end) {
         achilles = hare;
-        std::cout << *achilles;
         while (achilles < end && *achilles == *hare) ++achilles;
         if (achilles == std::next(hare)) {
-            std::cout << " to be copied\n";
             *tortoise = *hare;
             ++tortoise;
-        } else std::cout << " to be removed\n";
+        }
         hare = achilles;
     }
-    std::cout << "This function returns.\n";
     return tortoise;
 }
 
@@ -49,15 +48,15 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req, bool 
     std::cout << "Cleaned search strings\n";
     // If we're looking for all possible answers,
     // just remove duplicates of search strings for efficiency
-    std::sort(all_search_strings.begin(), all_search_strings.end());   
-    if (all_possible) all_search_strings.erase(std::unique(all_search_strings.begin(), all_search_strings.end()), all_search_strings.end());
+    std::sort(all_search_strings.begin(), all_search_strings.end());
+    std::vector<std::string>::iterator last;
+    if (all_possible) last = unique(all_search_strings.begin(), all_search_strings.end());
     // Otherwise, remove any strings that are duplicated at all (unsolvable puzzles)
-    else {
-        std::vector<std::string>::iterator end = truly_unique<std::string>(all_search_strings.begin(), all_search_strings.end());
-        std::cout << "Keeping: " << (end - all_search_strings.begin());
-        std::cout << "\tRemoving: " << all_search_strings.end() - end << std::endl;
-        all_search_strings.erase(end, all_search_strings.end());
-    }
+    else last = truly_unique<std::string>(all_search_strings.begin(), all_search_strings.end());
+    std::cout << "Search string count: " << (last - all_search_strings.begin());
+    std::cout << "\tRemoved " << all_search_strings.end() - last << " as duplicates.\n";
+    all_search_strings.erase(last, all_search_strings.end());
+
     return all_search_strings;
 }
 
@@ -167,4 +166,8 @@ void Finder::clean_string(std::string * s)
         }
         ++l;
     }
+}
+
+void Finder::read_words(std::string s) {
+    word_trie = get_trie_from_file(s);
 }
