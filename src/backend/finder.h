@@ -17,6 +17,7 @@ class Finder {
         void read_words(std::string word_file_name);
         // Public member
         TrieNode * word_trie;
+        bool word_trie_complete = false;
     private:
         //////////////////////
         // Private members

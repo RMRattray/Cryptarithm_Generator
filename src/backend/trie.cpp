@@ -42,15 +42,15 @@ void cryptarithm::get_words(std::vector<std::string> * sols, TrieNode * root, Tr
     while (*letter >= 'a' && *letter <= 'z' && current->next[*letter - 'a']) {
         // If we finish a word in the tree, can start over
         if (multiword && current->terminal) cryptarithm::get_words(sols, root, root, word_start, letter, used_letters, multiword);
-        ++letter;
         current = current->next[*letter - 'a'];
+        ++letter;
     }
     // If encountering a number, update the string and recurse
     if ((*letter >= '0' && *letter <= '9')) {
         char n = 'a';
         TrieNode * * next = current->next;
         while (n <= 'z') {
-            if (*next && (!used_letters.find(n) != std::string::npos)) {
+            if (*next && (used_letters.find(n) == std::string::npos)) {
                 replaceChar(letter, *letter, n);
                 cryptarithm::get_words(sols, root, *next, word_start, letter + 1, used_letters + n, multiword);
             }
@@ -78,7 +78,7 @@ TrieNode * cryptarithm::get_trie_from_file(std::string filename) {
     std::ifstream input;
     input.open(filename);
     if (!input.is_open()) {
-        std::cout << "WARNING! Failed to open file\n";
+        std::cout << "WARNING! Failed to open file:\n" << filename << std::endl;
         return NULL;
     }
 
@@ -97,5 +97,5 @@ TrieNode * cryptarithm::get_trie_from_file(std::string filename) {
 
     input.close();
 
-    return NULL;
+    return root;
 }

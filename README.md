@@ -22,7 +22,7 @@ to recognize the Qt library.
 
 There exists a separate, command-line version that can be made, configuring with
 ```
-cmake -S src/cmd build/cmd_version
+cmake -S src/cmd -B build/cmd_version
 ```
 and building with
 ```

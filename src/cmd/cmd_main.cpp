@@ -3,6 +3,7 @@
 #include <vector>
 #include "../backend/backend.h"
 #include "../backend/finder.h"
+#include "../backend/trie.h"
 
 int main(int argc, char ** argv) {
     if (argc < 5) {
@@ -35,9 +36,9 @@ int main(int argc, char ** argv) {
     }
 
     cryptarithm::Finder f;
-    auto w = f.find_cryptarithms(main_req, (argv[1][0] == '!'));
+    f.read_words("words.txt");
+    std::vector<std::string> w = f.find_cryptarithms(main_req, (argv[1][0] == '!'));
     for (std::string search_string : w) {
         std::cout << search_string << std::endl;
     }
-    f.read_words("words.txt");
 }

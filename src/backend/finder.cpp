@@ -16,6 +16,11 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req) {
     return find_cryptarithms(given_req, false);
 }
 
+// This function is similar to std::unique, which
+// moves duplicates of an element in a sorted vector to the
+// end of the vector.  The difference is, it moves
+// any elements that are duplicated at all, including
+// the first occurence of each.
 template <typename T>
 typename std::vector<T>::iterator truly_unique(typename std::vector<T>::iterator start, typename std::vector<T>::iterator end) {
     typename std::vector<T>::iterator tortoise = start;
@@ -33,8 +38,19 @@ typename std::vector<T>::iterator truly_unique(typename std::vector<T>::iterator
     return tortoise;
 }
 
+// This is the primary logic function.  It takes in "request_data" - a list
+// of addeds/subtrahends/factors and the joining operation, e.g., "send", "more",
+// and "+", and outputs a list of words that can result per sideways arithmetic.
+// The parameter "all_possible", if true, causes the function to return all words
+// for which a cryptarithm exists; if false, the function returns only those with
+// a unique solution of numbers behind them.
 std::vector<std::string> Finder::find_cryptarithms(request_data given_req, bool all_possible)
 {
+    // If there are no words to search against, don't bother developing search
+    // strings
+    if (!word_trie_complete) return std::vector<std::string>();
+
+    // Process the request, developing clean search strings
     req = &given_req;
     std::cout << "Starting to find cryptarithms.\n";
     gather_letters();
@@ -46,25 +62,36 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req, bool 
         clean_string(&search_string);
     }
     std::cout << "Cleaned search strings\n";
-    // If we're looking for all possible answers,
-    // just remove duplicates of search strings for efficiency
+
+    // Remove either duplicates or duplicated elements, depending on the
+    // value of (all_possible);
     std::sort(all_search_strings.begin(), all_search_strings.end());
     std::vector<std::string>::iterator last;
     if (all_possible) last = unique(all_search_strings.begin(), all_search_strings.end());
-    // Otherwise, remove any strings that are duplicated at all (unsolvable puzzles)
     else last = truly_unique<std::string>(all_search_strings.begin(), all_search_strings.end());
     std::cout << "Search string count: " << (last - all_search_strings.begin());
-    std::cout << "\tRemoved " << all_search_strings.end() - last << " as duplicates.\n";
+    std::cout << "\n\tRemoved " << all_search_strings.end() - last << " as duplicates.\n";
     all_search_strings.erase(last, all_search_strings.end());
 
-    return all_search_strings;
+    // Process against word trie
+    std::vector<std::string> words;
+    for (std::string& search_string : all_search_strings) {
+        get_words(&words, word_trie, word_trie, &(search_string[0]), &(search_string[0]), std::string(letters), false);
+    }
+
+    return words;
 }
 
+// This function gathers all the letters that occur in factors
+// into the "letters" variable.  For example, given "send" and "more",
+// it should be set to "sendmor", the second 'e' being redundant.
+// "max" is set to the number of letters - aka, the maximum iteration depth.
+// It also reports the locations of each instance of each letter
+// to the "character_finds" array of vectors of character pointers.
 void Finder::gather_letters()
 {
     char * filler = letters;
     for (std::string& factor : req->factors) {
-        std::cout << factor << std::endl;
         char * letter = &(factor[0]);
         while(*letter) {
             filler = letters;
@@ -77,10 +104,14 @@ void Finder::gather_letters()
             ++letter;
         }
     }
-    this->max = strlen(this->letters) - 1;
+    max = strlen(this->letters) - 1;
     return;
 }
 
+// This function assigns all possible numerical values to a letter
+// based on the numbers assigned to previous letter, and calls itself
+// for the next letter - or, if it is at the last letter, calls
+// the arithmetic function to do the math
 void Finder::recursively_permute(int index)
 {
     // For a point in the permutation, consider all possible digits not already assigned to a letter
@@ -107,6 +138,12 @@ void Finder::recursively_permute(int index)
     return;
 }
 
+// This function goes through the list of factors, which
+// by the time this function is called should be completely
+// turned into numbers, and produces a numerical product,
+// then replaces the digits that correspond to letters in its
+// case with those letters, and adds that string to the list
+// of search strings
 void Finder::do_arithmetic(void)
 {
     // First, combine factors to get product of desired type
@@ -142,6 +179,9 @@ void Finder::do_arithmetic(void)
     return;
 }
 
+// This converts a search string with a mix of digits
+// and letters to one with digits in a consistent order,
+// revealing equivalent search strings
 void Finder::clean_string(std::string * s)
 {
     // Example string: "4e240a" -> "0e102a"
@@ -168,6 +208,9 @@ void Finder::clean_string(std::string * s)
     }
 }
 
+// This function reads in the word trie from
+// a given file.  Should be run before attempting
+// to find cryptarithms
 void Finder::read_words(std::string s) {
-    word_trie = get_trie_from_file(s);
+    if(word_trie = get_trie_from_file(s)) word_trie_complete = true;
 }
