@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <iostream>
 #include "wordboxbox.h"
 
 FactorBox::FactorBox(QWidget *parent) : QFrame(parent) {
@@ -62,7 +63,9 @@ ArithBox::ArithBox(QWidget *parent) : QFrame(parent) {
 }
 
 void ArithBox::add_text_box() {
-    factor_stack->addWidget(new FactorBox);
+    FactorBox * n = new FactorBox;
+    factor_stack->addWidget(n);
+    factor_box_ptrs.push_back(n);
     ++factors;
 }
 
@@ -100,15 +103,17 @@ struct request_data ArithBox::yield_text_contents() {
     std::string f;
     s = product_box->text().toStdString();
     bool last_not_blank = (s != std::string(""));
-    f = factor_box_ptrs[0]->yield_text_contents() != std::string("");
+    f = factor_box_ptrs[0]->yield_text_contents();
     bool first_not_blank = (f != std::string(""));
+
     // If both first word and last word are blank, invalid puzzle
     if (!first_not_blank && !last_not_blank) return nullo;
     // If one or the other is blank, we've found the blank, invalidate
     // if we find another
     bool found_one_blank = !(first_not_blank && last_not_blank);
 
-    switch (operation_button->text().front().toLatin1() + last_not_blank) {
+    char decision = operation_button->text().front().toLatin1() + last_not_blank;
+    switch (decision) {
         // If there is a last word and we are adding, it is effectively
         // a subtraction problem wherein the first word is the 'sum'
         case '+' + true:
@@ -148,6 +153,7 @@ struct request_data ArithBox::yield_text_contents() {
         if (s != std::string("")) req.factors.push_back(s);
         else if (found_one_blank) return nullo;
         else found_one_blank = true;
+        ++fb;
     }
     f = final_factor_box->text().toStdString();
     if (f != std::string("")) req.factors.push_back(f);

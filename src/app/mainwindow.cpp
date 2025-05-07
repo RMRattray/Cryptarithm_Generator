@@ -36,6 +36,7 @@ Window::Window(QWidget *parent) :
 
     // Split into two areas
     solution_scroll_area = new QScrollArea;
+    solution_scroll_area->setWidgetResizable(true);
     left_stack_layout = new QVBoxLayout;
     main_split_layout->addItem(left_stack_layout);
     main_split_layout->addWidget(solution_scroll_area);
@@ -73,6 +74,12 @@ Window::Window(QWidget *parent) :
 
     left_stack_layout->addItem(button_area);
 
+    // And on the right side, a VBoxLayout in a ScrollWidget
+    QWidget * right_scroll_widget = new QWidget();
+    solution_scroll_area->setWidget(right_scroll_widget);
+    right_stack_layout = new QVBoxLayout;
+    right_scroll_widget->setLayout(right_stack_layout);
+
     this->setLayout(main_split_layout);
 
     // And let's not forget the finder object itself!
@@ -93,17 +100,20 @@ Window::Window(QWidget *parent) :
 }
 
 void Window::slot_calculate_request() {
-    std::cout << "I can debug by printing.\n";
     request_data req = arithmetic_args_box->yield_text_contents();
+    for (std::string s : req.factors) std::cout << "\t" << s << std::endl;
     emit request_data_ready(req);
 }
 
 void Window::slot_populate_solution_area() {
-    QWidget * dummy = new QWidget();
-    QVBoxLayout * right_stack_layout = new QVBoxLayout();
-    solution_scroll_area->setWidget(dummy);
-    dummy->setLayout(right_stack_layout);
+    // Remove old listings
+    while (QLayoutItem *item = right_stack_layout->takeAt(0)) {
+        QWidget *widget = item->widget();
+        if (widget) widget->deleteLater();
+        delete item; // Delete the layout item
+    }
     for (std::string word : my_q_finder->words) {
-        right_stack_layout->addWidget(new QLabel(QString::fromStdString(word)));
+        QLabel * newlabel = new QLabel(QString::fromStdString(word));
+        right_stack_layout->addWidget(newlabel);
     }
 }

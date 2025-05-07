@@ -30,6 +30,7 @@ class Window : public QWidget
     QPushButton *go_button;
     QHBoxLayout *main_split_layout;
     QScrollArea *solution_scroll_area;
+    QVBoxLayout *right_stack_layout;
     QVBoxLayout *left_stack_layout;
     ArithBox *arithmetic_args_box;
 
