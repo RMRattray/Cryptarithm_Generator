@@ -14,11 +14,10 @@ run in the root directory of the project.
 The project is built
 in a folder called `build/win_64_build` if using the commands above; more
 elaborate build scripts can produce build folders with specific names.
-The executable appears in `build/win_64_build/src/app/Debug`, presumably
-owing to the `src/app/CMakeLists.txt` defining the executable.
+The executable appears as `build/win_64_build/src/app/Debug/cryptarithm.exe`.
+It should look roughly like this:
 
-Having the .vscode/c_cpp_properties.json is what allows IntelliSense
-to recognize the Qt library.
+![Screenshot of v0.1](https://github.com/user-attachments/assets/4bb3acf9-0e1d-4697-a461-d44a4b300353)
 
 There exists a separate, command-line version that can be made, configuring with
 ```
