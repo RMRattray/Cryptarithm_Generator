@@ -4,6 +4,7 @@ qt_add_executable(cryptarithm
     main.cpp
     mainwindow.cpp
     wordboxbox.cpp
+    qfinder.cpp
 )
 
 # Use libraries in this executable
