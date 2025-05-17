@@ -12,6 +12,7 @@ int main(int argc, char ** argv) {
     }
 
     request_data main_req;
+    main_req.all_possible = (argv[1][0] == '!');
     switch (argv[2][0])
     {
     case '+':
@@ -37,7 +38,7 @@ int main(int argc, char ** argv) {
 
     cryptarithm::Finder f;
     f.read_words("words.txt");
-    std::vector<std::string> w = f.find_cryptarithms(main_req, (argv[1][0] == '!'));
+    std::vector<std::string> w = f.find_cryptarithms(main_req);
     for (std::string search_string : w) {
         std::cout << search_string << std::endl;
     }

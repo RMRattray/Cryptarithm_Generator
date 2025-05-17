@@ -50,10 +50,14 @@ Window::Window(QWidget *parent) :
     word_count_combo_box = new QComboBox();
     word_count_combo_box->addItem("single");
     word_count_combo_box->addItem("multiple");
+    unique_sol_combo_box = new QComboBox();
+    unique_sol_combo_box->addItem("with unique solutions");
+    unique_sol_combo_box->addItem("with any solutions");
 
     QFormLayout * selections = new QFormLayout();
     selections->addRow(new QLabel(tr("Operation")), operation_combo_box);
     selections->addRow(new QLabel(tr("Word count")), word_count_combo_box);
+    selections->addRow(new QLabel(tr("Solutions")), unique_sol_combo_box);
 
     left_stack_layout->addItem(selections);
     
@@ -111,7 +115,7 @@ Window::Window(QWidget *parent) :
 
 void Window::slot_calculate_request() {
     request_data req = arithmetic_args_box->yield_text_contents();
-    for (std::string s : req.factors) std::cout << "\t" << s << std::endl;
+    req.all_possible = (unique_sol_combo_box->currentIndex() != 0);
     emit request_data_ready(req);
 }
 

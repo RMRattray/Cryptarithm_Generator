@@ -27,6 +27,7 @@ class Window : public QWidget
     private:
     QComboBox *operation_combo_box;
     QComboBox *word_count_combo_box;
+    QComboBox *unique_sol_combo_box;
     QPushButton *reset_button;
     QPushButton *go_button;
     QHBoxLayout *main_split_layout;

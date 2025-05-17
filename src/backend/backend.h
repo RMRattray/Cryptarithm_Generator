@@ -14,6 +14,7 @@ struct request_data
 {
     Operation op;
     std::vector<std::string> factors;
+    bool all_possible;
 };
 
 #endif

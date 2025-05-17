@@ -12,10 +12,6 @@
 
 using namespace cryptarithm;
 
-std::vector<std::string> Finder::find_cryptarithms(request_data given_req) {
-    return find_cryptarithms(given_req, false);
-}
-
 // This function is similar to std::unique, which
 // moves duplicates of an element in a sorted vector to the
 // end of the vector.  The difference is, it moves
@@ -44,7 +40,7 @@ typename std::vector<T>::iterator truly_unique(typename std::vector<T>::iterator
 // The parameter "all_possible", if true, causes the function to return all words
 // for which a cryptarithm exists; if false, the function returns only those with
 // a unique solution of numbers behind them.
-std::vector<std::string> Finder::find_cryptarithms(request_data given_req, bool all_possible)
+std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
 {
     // If there are no words to search against, don't bother developing search
     // strings
@@ -67,7 +63,7 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req, bool 
     // value of (all_possible);
     std::sort(all_search_strings.begin(), all_search_strings.end());
     std::vector<std::string>::iterator last;
-    if (all_possible) last = unique(all_search_strings.begin(), all_search_strings.end());
+    if (given_req.all_possible) last = unique(all_search_strings.begin(), all_search_strings.end());
     else last = truly_unique<std::string>(all_search_strings.begin(), all_search_strings.end());
     std::cout << "Search string count: " << (last - all_search_strings.begin());
     std::cout << "\n\tRemoved " << all_search_strings.end() - last << " as duplicates.\n";
