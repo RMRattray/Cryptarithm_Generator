@@ -1,15 +1,15 @@
 #include <QObject>
-#include <string>
+#include <QString>
 #include <iostream>
 #include "qfinder.h"
 #include "../backend/backend.h"
 #include "../backend/finder.h"
 #include "../backend/trie.h"
 
-void QFinder::slot_read_file(std::string filename) {
-    emit signal_trie_read(false);
-    myFinder.read_words(filename);
-    emit signal_trie_read(myFinder.word_trie_complete);
+void QFinder::slot_read_file(QString filename) {
+    std::cout << "The slot to read in a file is running, filename: " << filename.toStdString() << std::endl;
+    myFinder.read_words(filename.toStdString());
+    emit signal_trie_read(myFinder.word_trie_complete ? FileReadStatus::FINISHED : FileReadStatus::FAILED, 0);
     return;
 }
 

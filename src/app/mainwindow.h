@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "qfinder.h"
 #include "wordboxbox.h"
+#include "filebox.h"
 
 class QPushButton;
 class QVBoxLayout;
@@ -30,9 +31,10 @@ class Window : public QWidget
     QPushButton *go_button;
     QHBoxLayout *main_split_layout;
     QScrollArea *solution_scroll_area;
-    QVBoxLayout *right_stack_layout;
+    QVBoxLayout *right_word_list_stack_layout;
     QVBoxLayout *left_stack_layout;
     ArithBox *arithmetic_args_box;
+    FileSelectBox *file_select_box;
 
     QFinder *my_q_finder;
 };

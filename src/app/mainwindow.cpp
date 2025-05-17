@@ -35,11 +35,10 @@ Window::Window(QWidget *parent) :
     main_split_layout = new QHBoxLayout;
 
     // Split into two areas
-    solution_scroll_area = new QScrollArea;
-    solution_scroll_area->setWidgetResizable(true);
     left_stack_layout = new QVBoxLayout;
+    QVBoxLayout * right_stack_layout = new QVBoxLayout;
     main_split_layout->addItem(left_stack_layout);
-    main_split_layout->addWidget(solution_scroll_area);
+    main_split_layout->addItem(right_stack_layout);
 
     // First thing in the left-side stack
     // are the dropdowns for operation
@@ -74,11 +73,18 @@ Window::Window(QWidget *parent) :
 
     left_stack_layout->addItem(button_area);
 
-    // And on the right side, a VBoxLayout in a ScrollWidget
+    // And on the right side, the file selector:
+    file_select_box = new FileSelectBox;
+    solution_scroll_area = new QScrollArea;
+    solution_scroll_area->setWidgetResizable(true);
+    right_stack_layout->addWidget(file_select_box);
+    right_stack_layout->addWidget(solution_scroll_area);
+    
+    // And for the scroll area, a VBoxLayout in a ScrollWidget
     QWidget * right_scroll_widget = new QWidget();
     solution_scroll_area->setWidget(right_scroll_widget);
-    right_stack_layout = new QVBoxLayout;
-    right_scroll_widget->setLayout(right_stack_layout);
+    right_word_list_stack_layout = new QVBoxLayout;
+    right_scroll_widget->setLayout(right_word_list_stack_layout);
 
     this->setLayout(main_split_layout);
 
@@ -97,6 +103,10 @@ Window::Window(QWidget *parent) :
     connect(go_button, SIGNAL(clicked()), this, SLOT(slot_calculate_request()));
     connect(this, SIGNAL(request_data_ready(request_data)), my_q_finder, SLOT(slot_find_cryptarithms(request_data)));
     connect(my_q_finder, SIGNAL(signal_words_found()), this, SLOT(slot_populate_solution_area()));
+
+    // Signals and slots to read in the word list
+    connect(file_select_box, SIGNAL(signal_read_word_list(QString)), my_q_finder, SLOT(slot_read_file(QString)));
+    connect(my_q_finder, SIGNAL(signal_trie_read(FileReadStatus, int)), file_select_box, SLOT(slot_light_indicator(FileReadStatus, int)));
 }
 
 void Window::slot_calculate_request() {
@@ -107,13 +117,13 @@ void Window::slot_calculate_request() {
 
 void Window::slot_populate_solution_area() {
     // Remove old listings
-    while (QLayoutItem *item = right_stack_layout->takeAt(0)) {
+    while (QLayoutItem *item = right_word_list_stack_layout->takeAt(0)) {
         QWidget *widget = item->widget();
         if (widget) widget->deleteLater();
         delete item; // Delete the layout item
     }
     for (std::string word : my_q_finder->words) {
         QLabel * newlabel = new QLabel(QString::fromStdString(word));
-        right_stack_layout->addWidget(newlabel);
+        right_word_list_stack_layout->addWidget(newlabel);
     }
 }

@@ -5,12 +5,14 @@ qt_add_executable(cryptarithm
     mainwindow.cpp
     wordboxbox.cpp
     qfinder.cpp
+    filebox.cpp
 )
 
 # Use libraries in this executable
 target_link_libraries(cryptarithm PRIVATE 
     backend
     Qt6::Widgets
+    Qt6::Gui
 )
 
 # set_target_properties(cryptarithm PROPERTIES
