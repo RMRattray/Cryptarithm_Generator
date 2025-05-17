@@ -40,6 +40,7 @@ FileSelectBox::FileSelectBox(QWidget *parent) : QFrame(parent) {
     lower_row->addWidget(status_light);
     lower_row->addSpacing(10);
     lower_row->addWidget(status_label);
+    lower_row->addSpacing(10);
     lower_row->addStretch(1);
     lower_row->addWidget(get_file_button);
     main_layout->addWidget(file_location);

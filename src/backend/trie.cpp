@@ -74,7 +74,8 @@ void cryptarithm::free_trie(TrieNode * root) {
     free(root);
 }
 
-TrieNode * cryptarithm::get_trie_from_file(std::string filename) {
+TrieNode * cryptarithm::get_trie_from_file(std::string filename, int * count) {
+
     std::ifstream input;
     input.open(filename);
     if (!input.is_open()) {
@@ -88,14 +89,21 @@ TrieNode * cryptarithm::get_trie_from_file(std::string filename) {
         return NULL;
     }
 
-    char buf[12];
+    int c = 0;
+    char buf[MAX_WORD_LEN];
     input.getline(buf, sizeof(buf));
-    while (input.gcount()) {
-        cryptarithm::insert_to_trie(root, std::string(buf));
+    while (!input.eof() && !input.fail()) {
+        if (buf[0]) { cryptarithm::insert_to_trie(root, std::string(buf)); c++; }
         input.getline(buf, sizeof(buf));
+    }
+    if (input.fail() && !input.eof()) {
+        std::cout << "WARNING! Failed to read line: " << buf << "\nin file: " << filename << std::endl;
+        input.close();
+        free_trie(root);
+        return NULL;
     }
 
     input.close();
-
+    *count = c;
     return root;
 }

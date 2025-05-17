@@ -8,8 +8,9 @@
 
 void QFinder::slot_read_file(QString filename) {
     std::cout << "The slot to read in a file is running, filename: " << filename.toStdString() << std::endl;
-    myFinder.read_words(filename.toStdString());
-    emit signal_trie_read(myFinder.word_trie_complete ? FileReadStatus::FINISHED : FileReadStatus::FAILED, 0);
+    int c = myFinder.read_words(filename.toStdString());
+    emit signal_trie_read(myFinder.word_trie_complete ? FileReadStatus::FINISHED : FileReadStatus::FAILED, c);
+    std::cout << "The slot to read in a file is done running.\n";
     return;
 }
 

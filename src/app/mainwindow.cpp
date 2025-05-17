@@ -9,6 +9,7 @@
 #include <QFormLayout>
 #include <QGroupBox>
 #include <iostream>
+#include <QCloseEvent>
 
 Window::Window(QWidget *parent) :
  QWidget(parent)
@@ -39,6 +40,8 @@ Window::Window(QWidget *parent) :
     QVBoxLayout * right_stack_layout = new QVBoxLayout;
     main_split_layout->addItem(left_stack_layout);
     main_split_layout->addItem(right_stack_layout);
+    main_split_layout->setStretchFactor(left_stack_layout, 0);
+    main_split_layout->setStretchFactor(right_stack_layout, 1);
 
     // First thing in the left-side stack
     // are the dropdowns for operation
@@ -56,7 +59,7 @@ Window::Window(QWidget *parent) :
 
     QFormLayout * selections = new QFormLayout();
     selections->addRow(new QLabel(tr("Operation")), operation_combo_box);
-    selections->addRow(new QLabel(tr("Word count")), word_count_combo_box);
+    selections->addRow(new QLabel(tr("Word count ")), word_count_combo_box);
     selections->addRow(new QLabel(tr("Solutions")), unique_sol_combo_box);
 
     left_stack_layout->addItem(selections);
@@ -94,7 +97,7 @@ Window::Window(QWidget *parent) :
 
     // And let's not forget the finder object itself!
     my_q_finder = new QFinder();
-    my_q_finder->slot_read_file("words.txt");
+    // my_q_finder->slot_read_file("words.txt");
 
     // And the signals and slots!
     /////////////////////////////////
@@ -130,4 +133,10 @@ void Window::slot_populate_solution_area() {
         QLabel * newlabel = new QLabel(QString::fromStdString(word));
         right_word_list_stack_layout->addWidget(newlabel);
     }
+}
+
+void Window::closeEvent(QCloseEvent * event) {
+    std::cout << "The special close event runs\n";
+    if (my_q_finder->myFinder.word_trie) cryptarithm::free_trie(my_q_finder->myFinder.word_trie);
+    event->accept();
 }

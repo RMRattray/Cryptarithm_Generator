@@ -207,9 +207,11 @@ void Finder::clean_string(std::string * s)
 // This function reads in the word trie from
 // a given file.  Should be run before attempting
 // to find cryptarithms
-void Finder::read_words(std::string s) {
+int Finder::read_words(std::string s) {
+    int count = 0;
     TrieNode * old_trie = word_trie;
-    if(word_trie = get_trie_from_file(s)) word_trie_complete = true;
+    if(word_trie = get_trie_from_file(s, &count)) word_trie_complete = true;
     else(word_trie = old_trie);
     if(old_trie && old_trie != word_trie) free_trie(old_trie);
+    return count;
 }

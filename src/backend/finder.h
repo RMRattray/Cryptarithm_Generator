@@ -14,7 +14,7 @@ class Finder {
         /// Public function
         std::vector<std::string> find_cryptarithms(request_data req);
         std::vector<std::string> find_cryptarithms(request_data req, bool all_possible);
-        void read_words(std::string word_file_name);
+        int read_words(std::string word_file_name);
         // Public member
         TrieNode * word_trie = NULL;
         bool word_trie_complete = false;

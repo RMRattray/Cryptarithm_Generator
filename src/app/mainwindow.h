@@ -5,6 +5,7 @@
 #include "qfinder.h"
 #include "wordboxbox.h"
 #include "filebox.h"
+#include <QCloseEvent>
 
 class QPushButton;
 class QVBoxLayout;
@@ -23,6 +24,7 @@ class Window : public QWidget
     private slots:
     void slot_calculate_request();
     void slot_populate_solution_area();
+    void closeEvent(QCloseEvent * event);
 
     private:
     QComboBox *operation_combo_box;

@@ -5,6 +5,8 @@
 #include <vector>
 
 #define ALPHABET_SIZE 'z' - 'a' + 1
+#define MAX_WORD_LEN 26
+// "philosophicopsychological", with 25 letters, is the longest word with ten or fewer distinct letters
 
 namespace cryptarithm {
 
@@ -21,7 +23,7 @@ void get_words(std::vector<std::string> * sols, TrieNode * root, TrieNode * curr
 
 void free_trie(TrieNode * root);
 
-TrieNode * get_trie_from_file(std::string filename);
+TrieNode * get_trie_from_file(std::string filename, int * count);
 
 }
 
