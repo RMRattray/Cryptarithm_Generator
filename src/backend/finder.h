@@ -35,6 +35,7 @@ class Finder {
         void recursively_permute(int index);
         void do_arithmetic(void);
         void clean_string(std::string * s);
+        void clean_self();
 };
 }
 

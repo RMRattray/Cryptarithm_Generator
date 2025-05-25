@@ -15,6 +15,13 @@ target_link_libraries(cryptarithm PRIVATE
     Qt6::Gui
 )
 
+install(TARGETS cryptarithm
+    DESTINATION build 
+)
+
+set_target_properties(cryptarithm PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/cryptarithm)
+
+
 # set_target_properties(cryptarithm PROPERTIES
 #     WIN32_EXECUTABLE ON
 #     MACOSX_BUNDLE ON

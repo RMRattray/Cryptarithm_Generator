@@ -10,6 +10,7 @@
 #include <QGroupBox>
 #include <iostream>
 #include <QCloseEvent>
+#include <QMessageBox>
 
 Window::Window(QWidget *parent) :
  QWidget(parent)
@@ -117,9 +118,15 @@ Window::Window(QWidget *parent) :
 }
 
 void Window::slot_calculate_request() {
-    request_data req = arithmetic_args_box->yield_text_contents();
-    req.all_possible = (unique_sol_combo_box->currentIndex() != 0);
-    emit request_data_ready(req);
+    if (my_q_finder->myFinder.word_trie) {
+        request_data req = arithmetic_args_box->yield_text_contents();
+        req.all_possible = (unique_sol_combo_box->currentIndex() != 0);
+        emit request_data_ready(req);
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("Select a word list file before attempting to find words.");
+        msgBox.exec();
+    }
 }
 
 void Window::slot_populate_solution_area() {

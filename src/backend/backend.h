@@ -17,4 +17,6 @@ struct request_data
     bool all_possible;
 };
 
+#define CLEAR(buf) memset(buf, 0, sizeof(buf));
+
 #endif

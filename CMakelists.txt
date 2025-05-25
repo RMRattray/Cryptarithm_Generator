@@ -22,3 +22,6 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Gui)
 
 add_subdirectory(src/app)
 add_subdirectory(src/backend)
+
+file(COPY ${CMAKE_SOURCE_DIR}/word_lists DESTINATION ${CMAKE_BINARY_DIR}/cryptarithm)
+

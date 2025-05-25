@@ -91,7 +91,7 @@ void FileSelectBox::slot_light_indicator(FileReadStatus status, int word_count) 
 }
 
 void FileSelectBox::get_file(void) {
-    QString file_name = QFileDialog::getOpenFileName(this, tr("Select word list file"), QDir::currentPath(), tr("Text files (*.txt)"));
+    QString file_name = QFileDialog::getOpenFileName(this, tr("Select word list file"), QDir::currentPath() + QDir::separator() + QString("word_lists"), tr("Text files (*.txt)"));
     file_location->setText(file_name);
     if (file_name != tr("")) {    
         slot_light_indicator(FileReadStatus::READING, 0);

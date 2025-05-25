@@ -74,6 +74,14 @@ void cryptarithm::free_trie(TrieNode * root) {
     free(root);
 }
 
+bool is_alpha(char * str) {
+    while (*str) {
+        if (*str >= 'A' && *str <= 'Z') *str |= 32;
+        if (!(*str >= 'a' && *str <= 'z')) break;
+        ++str;
+    } return !(*str);
+}
+
 TrieNode * cryptarithm::get_trie_from_file(std::string filename, int * count) {
 
     std::ifstream input;
@@ -93,7 +101,7 @@ TrieNode * cryptarithm::get_trie_from_file(std::string filename, int * count) {
     char buf[MAX_WORD_LEN];
     input.getline(buf, sizeof(buf));
     while (!input.eof() && !input.fail()) {
-        if (buf[0]) { cryptarithm::insert_to_trie(root, std::string(buf)); c++; }
+        if (buf[0] && is_alpha(buf)) { cryptarithm::insert_to_trie(root, std::string(buf)); c++; }
         input.getline(buf, sizeof(buf));
     }
     if (input.fail() && !input.eof()) {

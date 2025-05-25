@@ -48,6 +48,7 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
 
     // Process the request, developing clean search strings
     req = &given_req;
+    clean_self();
     std::cout << "Starting to find cryptarithms.\n";
     gather_letters();
     std::cout << "Gathered letters:\n";
@@ -55,7 +56,9 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
     recursively_permute(0);
     std::cout << "Developed search strings\n";
     for (std::string& search_string : all_search_strings) {
+        std::cout << search_string;
         clean_string(&search_string);
+        std::cout << "\t" << search_string << std::endl;
     }
     std::cout << "Cleaned search strings\n";
 
@@ -76,6 +79,21 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
     }
 
     return words;
+}
+
+//
+void Finder::clean_self() {
+    CLEAR(letters);
+    CLEAR(digits);
+    CLEAR(rechars);
+    CLEAR(firsts);
+    max = 0;
+    std::vector<char *> * v = character_finds + 10;
+    while (v > character_finds) {
+        --v;
+        v->clear();
+    }
+    all_search_strings.clear();
 }
 
 // This function gathers all the letters that occur in factors
@@ -142,6 +160,7 @@ void Finder::recursively_permute(int index)
 // of search strings
 void Finder::do_arithmetic(void)
 {
+    std::cout << digits << std::endl;
     // First, combine factors to get product of desired type
     long long int product = (req->op == Operation::MULTIPLICATION);
     long long int f;
