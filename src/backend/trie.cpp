@@ -47,6 +47,7 @@ void cryptarithm::get_words(std::vector<std::string> * sols, TrieNode * root, Tr
     }
     // If encountering a number, update the string and recurse
     if ((*letter >= '0' && *letter <= '9')) {
+        char d = *letter;
         char n = 'a';
         TrieNode * * next = current->next;
         while (n <= 'z') {
@@ -57,6 +58,7 @@ void cryptarithm::get_words(std::vector<std::string> * sols, TrieNode * root, Tr
             ++n;
             ++next;
         }
+        replaceChar(letter, *letter, d);
     }
     // If we reach the end of the string and the node is terminal, we found a word
     else if (!*letter && current->terminal) sols->push_back(std::string(word_start));

@@ -160,12 +160,12 @@ void Finder::recursively_permute(int index)
 // of search strings
 void Finder::do_arithmetic(void)
 {
-    std::cout << digits << std::endl;
     // First, combine factors to get product of desired type
-    long long int product = (req->op == Operation::MULTIPLICATION);
+    long long int product = stol(req->factors[0]);
     long long int f;
-    for (std::string factor : req->factors) {
-        f = atol(&factor[0]);
+    std::vector<std::string>::iterator factor = req->factors.begin() + 1;
+    while (factor < req->factors.end()) {
+        f = stol(*factor);
         switch (req->op)
         {
         case Operation::ADDITION:
@@ -173,10 +173,12 @@ void Finder::do_arithmetic(void)
             break;
         case Operation::SUBTRACTION:
             product -= f;
+            break;
         default:
             product *= f;
             break;
         }
+        ++factor;
     }
     // Then, convert product to string
     char product_str[20];
@@ -208,7 +210,7 @@ void Finder::clean_string(std::string * s)
     char r = '9' + 1; // Symbol used for replacing
     while (f = *l)
     {
-        if (f >= d && f <= 'a') {
+        if (f >= d && f < 'a') {
             // We found a digit (or a symbol)
             m = l;
             while(*m) {
