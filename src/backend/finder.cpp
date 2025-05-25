@@ -49,18 +49,30 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
     // Process the request, developing clean search strings
     req = &given_req;
     clean_self();
+    #ifdef DEBUG
     std::cout << "Starting to find cryptarithms.\n";
+    #endif
     gather_letters();
+    #ifdef DEBUG
     std::cout << "Gathered letters:\n";
     std::cout << letters << std::endl;
+    #endif
     recursively_permute(0);
+    #ifdef DEBUG
     std::cout << "Developed search strings\n";
+    #endif
     for (std::string& search_string : all_search_strings) {
+        #ifdef DEBUG
         std::cout << search_string;
+        #endif
         clean_string(&search_string);
+        #ifdef DEBUG
         std::cout << "\t" << search_string << std::endl;
+        #endif
     }
+    #ifdef DEBUG
     std::cout << "Cleaned search strings\n";
+    #endif
 
     // Remove either duplicates or duplicated elements, depending on the
     // value of (all_possible);
@@ -68,8 +80,10 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
     std::vector<std::string>::iterator last;
     if (given_req.all_possible) last = unique(all_search_strings.begin(), all_search_strings.end());
     else last = truly_unique<std::string>(all_search_strings.begin(), all_search_strings.end());
+    #ifdef DEBUG
     std::cout << "Search string count: " << (last - all_search_strings.begin());
     std::cout << "\n\tRemoved " << all_search_strings.end() - last << " as duplicates.\n";
+    #endif
     all_search_strings.erase(last, all_search_strings.end());
 
     // Process against word trie
@@ -81,7 +95,7 @@ std::vector<std::string> Finder::find_cryptarithms(request_data given_req)
     return words;
 }
 
-//
+// Reset data from previous queries
 void Finder::clean_self() {
     CLEAR(letters);
     CLEAR(digits);

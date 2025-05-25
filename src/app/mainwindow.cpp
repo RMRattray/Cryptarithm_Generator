@@ -120,6 +120,12 @@ Window::Window(QWidget *parent) :
 void Window::slot_calculate_request() {
     if (my_q_finder->myFinder.word_trie) {
         request_data req = arithmetic_args_box->yield_text_contents();
+        if (req.factors.size() == 0) {
+            QMessageBox msgBox;
+            msgBox.setText("Invalid input - please have one and only one blank text box.");
+            msgBox.exec();
+            return;
+        }
         req.all_possible = (unique_sol_combo_box->currentIndex() != 0);
         emit request_data_ready(req);
     } else {
@@ -142,8 +148,8 @@ void Window::slot_populate_solution_area() {
     }
 }
 
+// Special close event to free dynamically allocated memory
 void Window::closeEvent(QCloseEvent * event) {
-    std::cout << "The special close event runs\n";
     if (my_q_finder->myFinder.word_trie) cryptarithm::free_trie(my_q_finder->myFinder.word_trie);
     event->accept();
 }
