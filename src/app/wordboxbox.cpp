@@ -94,6 +94,13 @@ void ArithBox::change_focus_op(int new_index) {
     }
 }
 
+// mini function w/lambda in it
+bool is_alpha(const std::string& str) {
+    return std::all_of(str.begin(), str.end(), [](unsigned char c) {
+        return std::isalpha(c);
+    });
+}
+
 struct request_data ArithBox::yield_text_contents() {
     request_data nullo;
     request_data req;
@@ -102,8 +109,12 @@ struct request_data ArithBox::yield_text_contents() {
     std::string s;
     std::string f;
     s = product_box->text().toStdString();
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+    if (!is_alpha(s)) return nullo;
     bool last_not_blank = (s != std::string(""));
     f = factor_box_ptrs[0]->yield_text_contents();
+    std::transform(f.begin(), f.end(), f.begin(), [](unsigned char c) { return std::tolower(c); });
+    if (!is_alpha(f)) return nullo;
     bool first_not_blank = (f != std::string(""));
 
     // If both first word and last word are blank, invalid puzzle
@@ -150,12 +161,16 @@ struct request_data ArithBox::yield_text_contents() {
     std::vector<FactorBox *>::iterator fb = factor_box_ptrs.begin() + 1;
     while (fb < factor_box_ptrs.end()) {
         s = (*fb)->yield_text_contents();
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+        if (!is_alpha(s)) return nullo;
         if (s != std::string("")) req.factors.push_back(s);
         else if (found_one_blank) return nullo;
         else found_one_blank = true;
         ++fb;
     }
     f = final_factor_box->text().toStdString();
+    std::transform(f.begin(), f.end(), f.begin(), [](unsigned char c) { return std::tolower(c); });
+    if (!is_alpha(f)) return nullo;
     if (f != std::string("")) req.factors.push_back(f);
     else if (found_one_blank) return nullo;
 

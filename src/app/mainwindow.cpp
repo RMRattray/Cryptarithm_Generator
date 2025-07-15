@@ -122,7 +122,7 @@ void Window::slot_calculate_request() {
         request_data req = arithmetic_args_box->yield_text_contents();
         if (req.factors.size() == 0) {
             QMessageBox msgBox;
-            msgBox.setText("Invalid input - please have one and only one blank text box.");
+            msgBox.setText("Invalid input - please have one and only one blank box, and use only English letters, no spaces.");
             msgBox.exec();
             return;
         }
